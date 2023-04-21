@@ -1,12 +1,21 @@
-language: node_js
-env:
-    - ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}
-    - DOCKER_USR
-    - TERRAFORM_USR
-    - ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}
-    - ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}
-node_js:
-    - '8'
-    - '6'
+language: shell
+dist: focal
+
+group: edge
+
 services:
-  - mongodb
+  - docker
+
+cache:
+  directories:
+    - ".terraform"
+
+env:
+  - TRAVIS_SECURE_ENV_VARS=true
+
+before_script:
+  - docker pull hashicorp/terraform:light
+  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light init
+  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light validate
+  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light plan
+  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light apply -auto-approve
