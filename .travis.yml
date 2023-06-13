@@ -1,21 +1,22 @@
-language: shell
-dist: focal
-
-group: edge
-
-services:
-  - docker
-
-cache:
-  directories:
-    - ".terraform"
+language: node_js
+node_js:
+  - 12
 
 env:
-  - TRAVIS_SECURE_ENV_VARS=true
+  global:
+    - ALICLOUD_ACCESS_KEY=<your-access-key>
+    - ALICLOUD_SECRET_KEY=<your-secret-key>
+    - ALICLOUD_REGION=<your-region>
 
-before_script:
-  - docker pull hashicorp/terraform:light
-  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light init
-  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light validate
-  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light plan
-  - docker run -e "ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}" -e "ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}" -e "ALICLOUD_REGION=${ALICLOUD_REGION}" -v $(pwd):/x/ -w /x/ hashicorp/terraform:light apply -auto-approve
+before_install:
+  - curl https://raw.githubusercontent.com/alibaba/terraform-provider-alicloud/master/scripts/install.sh | sh
+
+script:
+  - npm install skip 
+  - npm run build skip
+
+deploy:
+  provider: script
+  script: alicloud ecs CreateInstance --ImageId <your-image-id> --InstanceType <your-instance-type> --RegionId $ALICLOUD_REGION
+  on:
+    branch: master
