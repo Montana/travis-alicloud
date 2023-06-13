@@ -9,14 +9,4 @@ env:
     - ALICLOUD_REGION=<your-region>
 
 before_install:
-  - curl https://raw.githubusercontent.com/alibaba/terraform-provider-alicloud/master/scripts/install.sh | sh
-
-script:
-  - npm install skip 
-  - npm run build skip
-
-deploy:
-  provider: script
-  script: alicloud ecs CreateInstance --ImageId <your-image-id> --InstanceType <your-instance-type> --RegionId $ALICLOUD_REGION
-  on:
-    branch: master
+  - wget https://raw.githubusercontent.com/alibaba/terraform-provider-alicloud/master/scripts/install.sh | sh
