@@ -1,3 +1,4 @@
+language: shell
 env:
   global:
     - ALICLOUD_ACCESS_KEY_ID=dummy-access-key-id
