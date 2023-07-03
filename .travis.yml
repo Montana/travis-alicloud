@@ -3,3 +3,4 @@ env:
     - ALICLOUD_ACCESS_KEY_ID=dummy-access-key-id
     - ALICLOUD_ACCESS_KEY_SECRET=dummy-access-key-secret
     - ALICLOUD_REGION=us-west-1
+install: skip
