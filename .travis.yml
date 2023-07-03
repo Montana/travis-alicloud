@@ -1,7 +1,7 @@
 language: shell
 env:
   global:
-    - ALICLOUD_ACCESS_KEY_ID=dummy-access-key-id
-    - ALICLOUD_ACCESS_KEY_SECRET=dummy-access-key-secret
+    - ALICLOUD_ACCESS_KEY_ID=alicloud-key
+    - ALICLOUD_ACCESS_KEY_SECRET=ali-access-key
     - ALICLOUD_REGION=us-west-1
 install: skip
