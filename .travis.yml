@@ -1,12 +1,8 @@
 language: node_js
 node_js:
   - 12
-
-before_install:
-  - npm install -g mock-aliyun-cli
-
-script:
-  - mock-aliyun configure set access-key-id <alimock>
-  - mock-aliyun configure set access-key-secret <alisecret>
-  - mock-aliyun configure set region <us-west-1>
-  - npm test
+env:
+  global:
+    - ALICLOUD_ACCESS_KEY_ID=dummy-access-key-id
+    - ALICLOUD_ACCESS_KEY_SECRET=dummy-access-key-secret
+    - ALICLOUD_REGION=us-west-1
